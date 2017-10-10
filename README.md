@@ -13,11 +13,19 @@ Connect a BMP180 or )*% to pins 13,15, Vcc and Gnd
 It's an SPI bus connection, so connect a display to the ESP32 like this:
 
 LOLIN32 LITE/Other ESP32
-CS    = 5;
-MOSI  = 23 // also known as DIN
-CLK   = 18
+
 CS    = 5
+
+MOSI  = 23 // also known as DIN
+
+CLK   = 18
+
+CS    = 5
+
 DC    = 17
+
 RST   = 16
+
 BUSY  = 4
+
 
