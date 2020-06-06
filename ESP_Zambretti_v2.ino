@@ -4,11 +4,11 @@ void setup() {
 
 void loop() {
   // USAGE : calc_zambretti(pressure, trend, month, wind_direction, hemisphere);
-  // pressure in hPA
-  // Trend "Rising", or "Falling" or "Steady"
-  // Month 1..12
-  // Wind direction "Calm", "N", "S", "E", "W", "NE", "SE", "SW", "NW"
-  // hemiSphere "Northern", "Southern"
+  // pressure - in hPA
+  // trend - "Rising", or "Falling" or "Steady"
+  // month  - 1..12
+  // wind_direction - "Calm", "N", "S", "E", "W", "NE", "SE", "SW", "NW"
+  // hemiSphere - "Northern", "Southern"
   calc_zambretti(950, "Falling", 1, "NW", "Northern");
   calc_zambretti(950, "Steady",  1, "NW", "Northern");
   calc_zambretti(950, "Rising",  1, "NW", "Northern");
@@ -36,8 +36,10 @@ void loop() {
   calc_zambretti(1050, "Falling", 9, "SW", "Northern");
   calc_zambretti(1050, "Steady",  9, "SW", "Northern");
   calc_zambretti(1050, "Rising",  9, "SW", "Northern");
-  Serial.println("-----------------");
+  Serial.println("---------------------------------------");
   calc_zambretti(1000, "Steady",  6, "Calm", "Northern");
+  calc_zambretti(1000, "Falling", 6, "Calm", "Northern");
+  calc_zambretti(1000, "Rising",  6, "Calm", "Northern");
   Serial.println("-----------------");
 
   delay(5000);
@@ -85,10 +87,9 @@ void calc_zambretti(float zpressure, String ztrend, int zmonth, String windDirec
   // RISING
   if (ztrend == "Rising") {
     int zambretti = round(-0.1424 * zpressure + 147.7);
-    //A Summer rising, improves the prospects by 1 unit over a Winter rising
-    if (zmonth < 4 || zmonth > 9) zambretti = zambretti + 1; // Increasing values makes the forecast worst!
-    if (zambretti < 1)  zambretti = 1;
-    if (zambretti > 13) zambretti = 13;
+    //A Winter rising, improves the forecast by 1 unit
+    if (zmonth < 4 || zmonth > 9) zambretti = zambretti + 1; // + 1 to adjust the forecast in Winter, usually better!
+    zambretti = constrain(zambretti, 1, 13);
     switch (zambretti) {
       case 1:  wx_text = wx_forecast('A'); break; // Settled Fine
       case 2:  wx_text = wx_forecast('B'); break; // Fine Weather
@@ -109,12 +110,9 @@ void calc_zambretti(float zpressure, String ztrend, int zmonth, String windDirec
   // FALLING
   if (ztrend == "Falling") {
     int zambretti = round(-0.1078 * zpressure + 114.31);
-    // A Winter falling generally results in a Z value higher by 1 unit.
-    if (zmonth < 4 || zmonth > 9) zambretti = zambretti + 1; // + makes the forecast worst, - better!
-    if (windDirection.startsWith("N")) zambretti = zambretti - 1;
-    if (windDirection.startsWith("S")) zambretti = zambretti + 1;
-    if (zambretti < 1) zambretti = 1;
-    if (zambretti > 9) zambretti = 9;
+    // A Winter falling, reduces the forecast by 1 unit
+    if (zmonth < 4 || zmonth > 9) zambretti = zambretti - 1; // -1 to adjust the forecast in Winter, usually worst!
+    zambretti = constrain(zambretti, 1, 9);
     switch (zambretti) {
       case 1:  wx_text = wx_forecast('A'); break; // Settled Fine
       case 2:  wx_text = wx_forecast('B'); break; // Fine Weather
@@ -131,9 +129,7 @@ void calc_zambretti(float zpressure, String ztrend, int zmonth, String windDirec
   // STEADY
   if (ztrend == "Steady") {
     int zambretti = round(0.00054749 * zpressure * zpressure - 1.212442 * zpressure + 670.08);
-    if (windDirection.startsWith("S")) zambretti = zambretti + 1;
-    if (zambretti < 1)  zambretti = 1;
-    if (zambretti > 10) zambretti = 10;
+    zambretti = constrain(zambretti, 1, 10);
     switch (zambretti) {
       case 1:  wx_text = wx_forecast('A'); break; // Settled Fine
       case 2:  wx_text = wx_forecast('B'); break; // Fine Weather
@@ -158,19 +154,19 @@ int CorrectForWind(int zpressure, String windDirection, String hemiSphere) {
     if (windDirection = "SE") return zpressure - 5;
     if (windDirection = "SW") return zpressure - 7;
     if (windDirection = "S")  return zpressure - 12;
-    if (windDirection = "NW") return zpressure + 2;
+    if (windDirection = "NW") return zpressure + 1;
     if (windDirection = "NE") return zpressure + 3;
     if (windDirection = "N")  return zpressure + 5;
   }
   else
-  {
+  { // "Southern" so reverse wind directions
     if (windDirection = "W")  return zpressure - 1;
     if (windDirection = "E")  return zpressure - 3;
-    if (windDirection = "NE") return zpressure - 5;
-    if (windDirection = "NW") return zpressure - 7;
+    if (windDirection = "NW") return zpressure - 5;
+    if (windDirection = "NE") return zpressure - 7;
     if (windDirection = "N")  return zpressure - 12;
-    if (windDirection = "SW") return zpressure + 2;
-    if (windDirection = "SE") return zpressure + 3;
+    if (windDirection = "SE") return zpressure + 1;
+    if (windDirection = "SW") return zpressure + 3;
     if (windDirection = "S")  return zpressure + 5;
   }
 }
