@@ -167,7 +167,7 @@ void calc_zambretti(float zpressure, String ztrend, int zmonth, String windDirec
   }
   // STEADY
   if (ztrend == "steady") {
-    zambretti = round(0.000026324 * pow(zpressure, 3) - 0.078908494 * pow(zpressure, 2) + 78.689408151 * zpressure - 26100.061908644 + 0.5);
+    zambretti = (0.000026324 * pow(zpressure, 3) - 0.078908494 * pow(zpressure, 2) + 78.689408151 * zpressure - 26100.061908644 + 0.8);
     zambretti = constrain(zambretti, 1, 10);
     switch (zambretti) {
       case 1:  wx_text = wx_forecast('A'); break; // Settled Fine
