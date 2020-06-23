@@ -142,7 +142,7 @@ void calc_zambretti(float zpressure, String ztrend, int zmonth, String windDirec
   }
   // FALLING
   if (ztrend == "falling") {
-    zambretti = round(-0.1078 * zpressure + 114.31);
+    zambretti = round((double)0.0000233328 * pow(zpressure,3) - 0.0709712121 * pow(zpressure,2) + 71.819660493 * zpressure - 24174.4547597608);
     if (hemiSphere == "northern") 
     {
       if (zmonth < 4 || zmonth > 9) zambretti = zambretti - 1;   // + 1 to adjust the forecast in Northern H. Winter, makes the weather worst!
@@ -167,7 +167,7 @@ void calc_zambretti(float zpressure, String ztrend, int zmonth, String windDirec
   }
   // STEADY
   if (ztrend == "steady") {
-    zambretti = (0.000026324 * pow(zpressure, 3) - 0.078908494 * pow(zpressure, 2) + 78.689408151 * zpressure - 26100.061908644 + 0.8);
+    zambretti = (double)(0.0000258964 * pow(zpressure, 3) - 0.07753778137 * pow(zpressure, 2) + 77.2287820569 * zpressure - 25582.130426005 + 0.5);
     zambretti = constrain(zambretti, 1, 10);
     switch (zambretti) {
       case 1:  wx_text = wx_forecast('A'); break; // Settled Fine
