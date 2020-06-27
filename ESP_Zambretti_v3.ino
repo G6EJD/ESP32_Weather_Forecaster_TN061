@@ -142,8 +142,7 @@ void calc_zambretti(float zpressure, String ztrend, int zmonth, String windDirec
   }
   // FALLING
   if (ztrend == "falling") {
-    zambretti = 0.0000246203 * pow(zpressure,3) - 0.0748992301 * pow(zpressure,2) + 75.8125990475 * zpressure - 25,526.8083073332;
-    zambretti = round(zambretti);
+    zambretti = round((0.0000246203 * pow(zpressure,3) - 0.0748992301 * pow(zpressure,2) + 75.8125990475 * zpressure - 25,526.8083073332));
     if (hemiSphere == "northern") 
     {
       if (zmonth < 4 || zmonth > 9) zambretti = zambretti - 1;   // + 1 to adjust the forecast in Northern H. Winter, makes the weather worst!
