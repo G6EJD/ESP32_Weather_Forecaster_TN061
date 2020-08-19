@@ -223,7 +223,7 @@ void calc_zambretti(float zpressure, String ztrend) {
   }
   // STEADY
   if (ztrend == "Steady") {
-    float zambretti = 138.24-0.133*zpressure; // y = 138.24-0.1331x
+    double zambretti = 138.24-0.133*zpressure; // y = 138.24-0.1331x
     switch (int(round(zambretti))) {
       case 1:  wx_text = wx_forecast('A'); wx_image = "sunny"; break;       //Settled Fine
       case 2:  wx_text = wx_forecast('B'); wx_image = "sunny"; break;       //Fine Weather
@@ -240,7 +240,7 @@ void calc_zambretti(float zpressure, String ztrend) {
   }
   // RISING
   if (ztrend == "Rising" || ztrend == "Rising slow" || ztrend == "Rising fast") {
-    float zambretti = 142.57-0.1376*zpressure; //y = 142.57-0.1376x
+    double zambretti = 142.57-0.1376*zpressure; //y = 142.57-0.1376x
     //A Summer rising, improves the prospects by 1 unit over a Winter rising
     if (zmonth < 4 || zmonth > 9) zambretti = zambretti + 1; // Increasing values makes the forecast worst!
     switch (int(round(zambretti))) {
