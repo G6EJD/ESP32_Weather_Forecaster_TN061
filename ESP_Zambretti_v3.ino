@@ -105,7 +105,7 @@ String wx_forecast(char code) {
 
 void calc_zambretti(float zpressure, String ztrend, int zmonth, String windDirection, String hemiSphere) {
   String wx_text;
-  int zambretti;
+  douuble zambretti = 0;
   ztrend.toLowerCase();
   windDirection.toLowerCase();
   hemiSphere.toLowerCase();
@@ -123,7 +123,7 @@ void calc_zambretti(float zpressure, String ztrend, int zmonth, String windDirec
       if (zmonth >= 3 && zmonth <= 10) zambretti = zambretti + 1; // + 1 to adjust the forecast in Southern H. Winter, makes the weather worst!
     }
     zambretti = constrain(zambretti, 1, 13);
-    switch (zambretti) {
+    switch ((int)zambretti) {
       case 1:  wx_text = wx_forecast('A'); break; // Settled Fine
       case 2:  wx_text = wx_forecast('B'); break; // Fine Weather
       case 3:  wx_text = wx_forecast('C'); break; // Becoming Fine
@@ -142,7 +142,7 @@ void calc_zambretti(float zpressure, String ztrend, int zmonth, String windDirec
   }
   // FALLING
   if (ztrend == "falling") {
-    zambretti = round((0.0000246203 * pow(zpressure,3) - 0.0748992301 * pow(zpressure,2) + 75.8125990475 * zpressure - 25526.8083073332));
+    zambretti = round((0.0000257935 * pow(zpressure, 3) - 0.078482105 * pow(zpressure, 2) + 79.4582219457 * zpressure - 26762.7164899421));
     if (hemiSphere == "northern") 
     {
       if (zmonth < 4 || zmonth > 9) zambretti = zambretti - 1;   // + 1 to adjust the forecast in Northern H. Winter, makes the weather worst!
@@ -152,7 +152,7 @@ void calc_zambretti(float zpressure, String ztrend, int zmonth, String windDirec
       if (zmonth >= 3 && zmonth <= 10) zambretti = zambretti - 1; // + 1 to adjust the forecast in Southern H. Winter, makes the weather worst!
     }
     zambretti = constrain(zambretti, 1, 9);
-    switch (zambretti) {
+    switch ((int)zambretti) {
       case 1:  wx_text = wx_forecast('A'); break; // Settled Fine
       case 2:  wx_text = wx_forecast('B'); break; // Fine Weather
       case 3:  wx_text = wx_forecast('D'); break; // Fine Becoming Less Settled
@@ -169,7 +169,7 @@ void calc_zambretti(float zpressure, String ztrend, int zmonth, String windDirec
   if (ztrend == "steady") {
     zambretti = (double)(0.0000258964 * pow(zpressure, 3) - 0.07753778137 * pow(zpressure, 2) + 77.2287820569 * zpressure - 25582.130426005 + 0.5);
     zambretti = constrain(zambretti, 1, 10);
-    switch (zambretti) {
+    switch ((int)zambretti) {
       case 1:  wx_text = wx_forecast('A'); break; // Settled Fine
       case 2:  wx_text = wx_forecast('B'); break; // Fine Weather
       case 3:  wx_text = wx_forecast('E'); break; // Fine, Possibly showers
